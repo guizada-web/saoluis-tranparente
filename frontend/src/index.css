@@ -1,103 +1,157 @@
 @import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
 
-:root {
+/* -------------------------
+   Variáveis e base
+   ------------------------- */
+:root{
   --bg: #f6f7fb;
   --accent: #2b6cb0;
+  --accent-dark: #63b3ed;
   --text: #1a202c;
+  --card-bg: #ffffff;
+  --border: #e2e8f0;
   --muted: #718096;
-
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: var(--bg);
-  color: var(--text);
+/* Reset básico */
+html,body,#root { height:100%; margin:0; background:var(--bg); color:var(--text); }
+body { min-width:320px; }
+
+/* App layout */
+.app-container { min-height:100vh; display:flex; flex-direction:column; background:var(--bg); }
+.header { width:100%; padding:12px 20px; box-sizing:border-box; border-bottom:1px solid rgba(0,0,0,0.04); }
+
+/* Conteúdo central (posicionado relativamente para suportar left-column absoluta) */
+.main-content {
+  position: relative;            /* importante: left-column será absolute dentro deste container */
+  flex: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;       /* padding inferior para conforto */
+  box-sizing: border-box;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+/* Título centralizado */
+.page-title {
+  text-align: center;
+  margin: 0 0 22px 0;
+  font-size: 1.9rem;
+  font-weight: 700;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+/* -------------------------
+   Layout específico pedido:
+   - left-column fica "na ponta da esquerda" (fixa dentro do main-content)
+   - área central com mapa fica centralizada (maior mapa)
+   ------------------------- */
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+/* largura fixa da coluna de demandas */
+:root { --left-col-w: 360px; }
 
-.app-container {
+/* Left column: colocada no canto esquerdo do main-content */
+.left-column {
+  position: absolute;
+  left: 0;
+  top: 96px; /* distância do topo do main-content: ajuste se necessário */
+  width: var(--left-col-w);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  gap: 20px;
+  box-sizing: border-box;
+  z-index: 5;
 }
 
-.main-content {
-  flex: 1;
-  padding: 1rem;
-  max-width: 1200px;
+/* Cards dentro da left-column (mantive visual original) */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(22,28,45,0.04);
+  box-sizing: border-box;
+}
+
+/* Inputs e botões da demanda (mantive classes originais) */
+.input-field {
+  width:100%;
+  padding:0.75rem;
+  border:1px solid var(--border);
+  border-radius:6px;
+  margin-bottom:0.8rem;
+  box-sizing:border-box;
+}
+.input-field:focus {
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 4px rgba(43,108,176,0.08);
+}
+.form-actions { display:flex; justify-content:center; margin-top:6px; }
+.btn-primary { background:var(--accent); color:white; border:none; padding:0.7rem 1.4rem; border-radius:8px; font-weight:600; }
+.btn-primary:hover { background:var(--accent-dark); }
+
+/* Espaço central principal: deixa margem à esquerda igual à largura da coluna de demandas,
+   e centraliza o conteúdo restante (mapa) */
+.center-area {
+  margin-left: calc(var(--left-col-w) + 40px); /* 40px gap entre coluna fixa e área central */
+  display: flex;
+  justify-content: center;    /* centraliza o map-wrapper */
+  align-items: flex-start;
+  min-height: 400px;
+  box-sizing: border-box;
+}
+
+/* Wrapper do mapa: controla largura máxima e centraliza o mapa visualmente */
+.map-wrapper {
+  width: 100%;
+  max-width: 760px;           /* AUMENTEI: mapa maior agora */
   margin: 0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  align-items: stretch;
 }
 
+/* título do mapa (à esquerda dentro do wrapper) */
+.map-title {
+  font-weight:600;
+  font-size:1rem;
+  margin:0 0 6px 0;
+  text-align:left;
+}
+
+/* Container do leaflet - altura maior */
 .map-root {
-  height: 60vh;
+  width: 100%;
+  height: 700px;             /* AUMENTEI bastante para mapa maior */
+  min-height: 520px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 18px rgba(22,28,45,0.06);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Pequenas classes utilitárias */
+.text-muted { color:#718096; font-size:0.95rem; }
+.center { text-align:center; }
+
+/* -------------------------
+   Responsividade: em telas menores removemos o absolute da left-column
+   e empilhamos o conteúdo (para mobile ainda ficar acessível)
+   ------------------------- */
+@media (max-width: 1024px) {
+  .left-column { position: static; width: 100%; top: auto; margin-bottom: 14px; }
+  .center-area { margin-left: 0; padding-top: 8px; }
+  .map-wrapper { max-width: 100%; }
+  .map-root { height: 56vh; min-height: 360px; }
+  .page-title { font-size: 1.6rem; }
+}
+
+/* Mobile estreito */
+@media (max-width: 480px) {
+  .map-root { height: 46vh; }
+  .page-title { font-size: 1.2rem; }
 }

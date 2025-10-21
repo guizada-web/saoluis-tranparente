@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import demandaRoutes from "./routes/demandaRoutes.js";
+import obraRoutes from "./routes/obraRoutes.js";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/demandas", demandaRoutes);
+app.use("/api/obras", obraRoutes);
 
 // Rotas de exemplo
 app.get("/", (req, res) => {

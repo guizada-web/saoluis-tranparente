@@ -31,59 +31,123 @@ export default function Home() {
   return (
     <div className="app-container">
       <Navbar />
-      <main className="main-content p-6">
-        <h1 className="text-2xl font-bold mb-4">Demandas Comunitárias</h1>
+      <main className="main-content">
+        <h1 style={{
+          fontSize: "2rem",
+          fontWeight: "bold",
+          marginBottom: "1.5rem",
+          color: "var(--text)",
+          textAlign: "center"
+        }}>
+          Demandas Comunitárias e Mapa de Obras
+        </h1>
 
-        <form onSubmit={criarDemanda} className="mb-6 space-y-2">
-          <input
-            type="text"
-            placeholder="Título"
-            value={nova.titulo}
-            onChange={(e) => setNova({ ...nova, titulo: e.target.value })}
-            className="border p-2 w-full rounded"
-          />
-          <textarea
-            placeholder="Descrição"
-            value={nova.descricao}
-            onChange={(e) => setNova({ ...nova, descricao: e.target.value })}
-            className="border p-2 w-full rounded"
-          />
-          <input
-            type="text"
-            placeholder="Bairro"
-            value={nova.bairro}
-            onChange={(e) => setNova({ ...nova, bairro: e.target.value })}
-            className="border p-2 w-full rounded"
-          />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Criar
-          </button>
-        </form>
+        <div className="content-grid">
+          <div className="demandas-section">
+            <div className="form-container">
+              <h2 style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                marginBottom: "1rem",
+                color: "var(--text)"
+              }}>
+                Nova Demanda
+              </h2>
+              <form onSubmit={criarDemanda}>
+                <input
+                  type="text"
+                  placeholder="Título"
+                  value={nova.titulo}
+                  onChange={(e) => setNova({ ...nova, titulo: e.target.value })}
+                  className="input-field"
+                  required
+                />
+                <textarea
+                  placeholder="Descrição"
+                  value={nova.descricao}
+                  onChange={(e) => setNova({ ...nova, descricao: e.target.value })}
+                  className="input-field"
+                  rows="3"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Bairro"
+                  value={nova.bairro}
+                  onChange={(e) => setNova({ ...nova, bairro: e.target.value })}
+                  className="input-field"
+                  required
+                />
+                <button type="submit" className="btn-primary">
+                  Criar Demanda
+                </button>
+              </form>
+            </div>
 
-        <ul>
-          {demandas.map((d) => (
-            <li
-              key={d.id}
-              className="border p-3 rounded mb-2 flex justify-between items-center"
-            >
-              <div>
-                <h2 className="font-semibold">{d.titulo}</h2>
-                <p>{d.descricao}</p>
-                <span className="text-sm text-gray-500">{d.bairro}</span>
-              </div>
-              <button
-                onClick={() => deletarDemanda(d.id)}
-                className="text-red-500 hover:underline"
-              >
-                Excluir
-              </button>
-            </li>
-          ))}
-        </ul>
+            <div className="demandas-list">
+              <h2 style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                marginBottom: "1rem",
+                color: "var(--text)"
+              }}>
+                Demandas Existentes
+              </h2>
+              {demandas.length === 0 ? (
+                <p style={{ color: "var(--muted)" }}>Nenhuma demanda encontrada.</p>
+              ) : (
+                <ul style={{ listStyle: "none", padding: 0 }}>
+                  {demandas.map((d) => (
+                    <li key={d.id} className="demanda-item">
+                      <div>
+                        <h3 style={{
+                          fontSize: "1.125rem",
+                          fontWeight: "600",
+                          marginBottom: "0.5rem",
+                          color: "var(--text)"
+                        }}>
+                          {d.titulo}
+                        </h3>
+                        <p style={{
+                          marginBottom: "0.5rem",
+                          color: "var(--text)"
+                        }}>
+                          {d.descricao}
+                        </p>
+                        <span style={{
+                          fontSize: "0.875rem",
+                          color: "var(--muted)"
+                        }}>
+                          Bairro: {d.bairro}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => deletarDemanda(d.id)}
+                        className="btn-danger"
+                      >
+                        Excluir
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
 
-        <section className="map-root" aria-label="Mapa de obras">
-          <MapView />
-        </section>
+          <div className="map-section">
+            <h2 style={{
+              fontSize: "1.25rem",
+              fontWeight: "600",
+              marginBottom: "1rem",
+              color: "var(--text)"
+            }}>
+              Mapa de Obras Públicas
+            </h2>
+            <section className="map-root" aria-label="Mapa de obras públicas">
+              <MapView />
+            </section>
+          </div>
+        </div>
       </main>
     </div>
   );
