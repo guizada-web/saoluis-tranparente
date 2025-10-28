@@ -66,8 +66,13 @@ export default function Home() {
                   placeholder="Descrição"
                   value={nova.descricao}
                   onChange={(e) => setNova({ ...nova, descricao: e.target.value })}
+                  onInput={(e) => {
+                    // auto-resize: reset height, então ajusta ao scrollHeight
+                    const ta = e.target;
+                    ta.style.height = 'auto';
+                    ta.style.height = ta.scrollHeight + 'px';
+                  }}
                   className="input-field"
-                  rows="3"
                   required
                 />
                 <input
