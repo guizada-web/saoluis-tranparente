@@ -1,4 +1,4 @@
-# São Luís Transparente
+# CleanWork
 
 Aplicativo web para transparência e participação comunitária em São Luís — permite visualizar obras públicas no mapa, submeter demandas comunitárias e acompanhar informações básicas das obras.
 
@@ -28,7 +28,7 @@ Funcionalidades principais:
 
 ```
 DB_USER=seu_usuario
-# 🌆 São Luís Transparente
+# 🌆 CleanWork
 
 Aplicativo web para transparência e participação comunitária em São Luís — visualize obras públicas no mapa, submeta demandas e acompanhe informações relevantes.
 

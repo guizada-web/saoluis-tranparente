@@ -24,10 +24,13 @@ export default function Navbar() {
         <Link to="/" style={{
           color: "var(--text)",
           textDecoration: "none",
-          fontWeight: "bold",
-          fontSize: "1.25rem"
+          display: "flex",
+          alignItems: "center",
+          gap: 10
         }}>
-          São Luís Transparente
+          {/* ícone sem texto embutido */}
+          <img src="/cleanwork-logo.svg" alt="" role="img" style={{ height: 36, width: 'auto', display: 'block' }} />
+          <span style={{ fontWeight: "700", fontSize: "1.25rem", color: "var(--text)" }}>CleanWork</span>
         </Link>
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
           <Link to="/dashboard" style={{

@@ -1,4 +1,4 @@
-# TODO - Melhorias no Projeto São Luís Transparente
+# TODO - Melhorias no Projeto CleanWork
 
 ## 1. Melhorar a API das Obras
 - [x] Adicionar campos de andamento no modelo obraModel.js (ex: status, progresso, data_inicio, data_fim, valor_estimado)
